@@ -21,7 +21,7 @@
 
       <section class="input-section" aria-label="Entrada">
         <label class="label" for="textInput">Texto</label>
-        <div class="input-shell">
+        <div id="inputShell" class="input-shell" data-state="idle">
           <input
             id="textInput"
             class="input"
@@ -56,7 +56,7 @@
             </div>
           </div>
 
-          <p id="result" class="output" aria-live="polite"></p>
+          <p id="result" class="output"></p>
 
           <p id="neutral" class="neutral">
             Escribe más de <strong>3</strong> caracteres para mostrar el texto invertido.
