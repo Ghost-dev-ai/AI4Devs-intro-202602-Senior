@@ -1,11 +1,71 @@
+<!-- index.html -->
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Reverse String</title>    
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Reverse Text Generator</title>
+  <meta name="description" content="Invierte texto en tiempo real y muestra métricas de palabras y caracteres." />
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-<script src="script.js"></script>
+  <main class="app" aria-label="Reverse Text Generator">
+    <section class="card" role="region" aria-labelledby="appTitle">
+      <header class="header">
+        <div class="badge" aria-hidden="true">Live</div>
+        <h1 id="appTitle" class="title">Reverse Text Generator</h1>
+        <p class="subtitle">
+          Ingrese un texto mayor a 3 caracteres para ver el resultado invertido en tiempo real.
+        </p>
+      </header>
+
+      <section class="input-section" aria-label="Entrada">
+        <label class="label" for="textInput">Texto</label>
+        <div class="input-shell">
+          <input
+            id="textInput"
+            class="input"
+            type="text"
+            inputmode="text"
+            autocomplete="off"
+            spellcheck="false"
+            placeholder="Escribe aquí…"
+            aria-describedby="hint"
+          />
+          <span class="input-glow" aria-hidden="true"></span>
+        </div>
+        <p id="hint" class="hint">
+          Tip: sin botones — el resultado aparece automáticamente.
+        </p>
+      </section>
+
+      <section class="output-section" aria-label="Salida">
+        <div id="outputCard" class="output-card is-empty" role="status" aria-live="polite">
+          <div class="output-top">
+            <h2 class="output-title">Resultado</h2>
+
+            <div id="metrics" class="metrics is-hidden" aria-label="Métricas del resultado">
+              <span class="metric" aria-label="Palabras">
+                <span class="metric-label">Palabras</span>
+                <span id="wordCount" class="metric-value">0</span>
+              </span>
+              <span class="metric" aria-label="Caracteres">
+                <span class="metric-label">Caracteres</span>
+                <span id="charCount" class="metric-value">0</span>
+              </span>
+            </div>
+          </div>
+
+          <p id="result" class="output" aria-live="polite"></p>
+
+          <p id="neutral" class="neutral">
+            Escribe más de <strong>3</strong> caracteres para mostrar el texto invertido.
+          </p>
+        </div>
+      </section>
+    </section>
+  </main>
+
+  <script src="script.js" defer></script>
 </body>
 </html>
