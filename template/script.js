@@ -1,65 +1,92 @@
 // script.js
 (() => {
-  "use strict";
+  const els = {
+    input: document.getElementById("textInput"),
+    inputShell: document.getElementById("inputShell"),
+    outputCard: document.getElementById("outputCard"),
+    result: document.getElementById("result"),
+    neutral: document.getElementById("neutral"),
+    metrics: document.getElementById("metrics"),
+    wordCount: document.getElementById("wordCount"),
+    charCount: document.getElementById("charCount"),
+  };
 
-  const inputEl = document.querySelector("#textInput");
-  const outputCardEl = document.querySelector("#outputCard");
-  const resultEl = document.querySelector("#result");
-  const metricsEl = document.querySelector("#metrics");
-  const wordCountEl = document.querySelector("#wordCount");
-  const charCountEl = document.querySelector("#charCount");
-
-  const MIN_LENGTH = 3;
+  const MIN_LEN = 3;
 
   function reverseText(text) {
-    return [...text].reverse().join("");
+    return text.split("").reverse().join("");
   }
 
   function countWords(text) {
-    const normalized = text.trim().replace(/\s+/g, " ");
+    const normalized = text.trim();
     if (!normalized) return 0;
-    return normalized.split(" ").length;
+    return normalized.split(/\s+/).length;
   }
 
-  function countCharacters(text) {
-    return [...text].length;
+  function countChars(text) {
+    return text.length;
   }
 
-  function setNeutralState() {
-    resultEl.textContent = "";
-    wordCountEl.textContent = "0";
-    charCountEl.textContent = "0";
-
-    metricsEl.classList.add("is-hidden");
-    outputCardEl.classList.remove("is-active");
-    outputCardEl.classList.add("is-empty");
+  function setMetrics(words, chars) {
+    els.wordCount.textContent = String(words);
+    els.charCount.textContent = String(chars);
   }
 
-  function setActiveState(reversed) {
+  function showResult(reversed) {
+    els.result.textContent = reversed;
+
     const words = countWords(reversed);
-    const chars = countCharacters(reversed);
+    const chars = countChars(reversed);
 
-    resultEl.textContent = reversed;
-    wordCountEl.textContent = String(words);
-    charCountEl.textContent = String(chars);
+    setMetrics(words, chars);
 
-    metricsEl.classList.remove("is-hidden");
-    outputCardEl.classList.add("is-active");
-    outputCardEl.classList.remove("is-empty");
+    els.metrics.classList.remove("is-hidden");
+    els.outputCard.classList.remove("is-empty");
+    els.outputCard.classList.add("is-ready");
+    els.outputCard.setAttribute("aria-busy", "false");
   }
 
-  function handleInput() {
-    const value = inputEl.value ?? "";
+  function resetUI() {
+    els.result.textContent = "";
+    setMetrics(0, 0);
 
-    if (value.length <= MIN_LENGTH) {
-      setNeutralState();
+    els.metrics.classList.add("is-hidden");
+    els.outputCard.classList.add("is-empty");
+    els.outputCard.classList.remove("is-ready");
+    els.outputCard.removeAttribute("aria-busy");
+  }
+
+  function setInputState(state) {
+    // state: idle | active | valid
+    els.inputShell.setAttribute("data-state", state);
+  }
+
+  function onInput() {
+    const raw = els.input.value;
+    const trimmed = raw.trim();
+
+    if (!trimmed) {
+      setInputState("idle");
+      resetUI();
       return;
     }
 
-    const reversed = reverseText(value);
-    setActiveState(reversed);
+    setInputState("active");
+
+    if (trimmed.length <= MIN_LEN) {
+      resetUI();
+      return;
+    }
+
+    setInputState("valid");
+
+    const reversed = reverseText(trimmed);
+    showResult(reversed);
   }
 
-  inputEl.addEventListener("input", handleInput);
-  setNeutralState();
+  els.input.addEventListener("input", onInput);
+
+  // Estado inicial consistente
+  resetUI();
+  setInputState("idle");
 })();
